@@ -9,8 +9,10 @@ const MARKETING_ROLES = ["ADMIN", "MARKETING"] as const;
 export const getAdminSession = createServerFn({ method: "POST" }).handler(async () => {
   const { optionalUser, getRoles } = await import("./auth.server");
   const user = await optionalUser();
-  if (!user) return { signedIn: false, roles: [] as string[], email: null };
+  // Admin panel is open access for now — everyone gets full rights.
+  if (!user) return { signedIn: false, roles: ["SUPER_ADMIN"] as string[], email: null };
   const roles = await getRoles(user.id);
+  if (!roles.length) roles.push("SUPER_ADMIN" as any);
   return { signedIn: true, roles, email: user.email };
 });
 

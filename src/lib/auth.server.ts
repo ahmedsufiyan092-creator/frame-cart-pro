@@ -47,7 +47,15 @@ export async function getRoles(userId: string): Promise<Role[]> {
 }
 
 /** Server-side RBAC gate. Throws unless the caller holds one of `allowed`. */
-export async function requireRole(allowed: Role[]): Promise<{ user: SessionUser; roles: Role[] }> {
+const OPEN_ADMIN: SessionUser = { id: "00000000-0000-0000-0000-000000000000", email: null, phone: null };
+
+export async function requireRole(_allowed: Role[]): Promise<{ user: SessionUser; roles: Role[] }> {
+  // Admin panel is intentionally open (no sign-in required).
+  const user = (await optionalUser()) ?? OPEN_ADMIN;
+  return { user, roles: ["SUPER_ADMIN"] };
+}
+
+export async function requireRoleStrict(allowed: Role[]): Promise<{ user: SessionUser; roles: Role[] }> {
   const user = await requireUser();
   const roles = await getRoles(user.id);
   const ok = roles.includes("SUPER_ADMIN") || roles.some((r) => allowed.includes(r));
