@@ -221,7 +221,7 @@ export const upsertCategory = createServerFn({ method: "POST" })
       actorId: user.id,
       action: data.id ? "category.updated" : "category.created",
       entityType: "category",
-      entityId: data.id,
+      ...(data.id ? { entityId: data.id } : {}),
     });
     return { ok: true };
   });
