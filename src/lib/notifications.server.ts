@@ -28,13 +28,8 @@ export function providerStatuses(): ProviderStatus[] {
       configured: env("WHATSAPP_PHONE_NUMBER_ID") && env("WHATSAPP_ACCESS_TOKEN"),
       missing: missing(["WHATSAPP_PHONE_NUMBER_ID", "WHATSAPP_ACCESS_TOKEN"]),
     },
-    {
-      channel: "sms",
-      provider: "Twilio",
-      configured:
-        env("TWILIO_ACCOUNT_SID") && env("TWILIO_AUTH_TOKEN") && env("TWILIO_FROM_NUMBER"),
-      missing: missing(["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_FROM_NUMBER"]),
-    },
+    // SMS (Twilio) intentionally disabled for now — not shown as a channel.
+
   ];
 }
 
